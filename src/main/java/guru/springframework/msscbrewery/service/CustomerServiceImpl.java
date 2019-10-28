@@ -28,11 +28,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void update(UUID id, CustomerDto customer) {
         //TODO impl - would add real impl to update beer
+        log.trace("Updating customer {id: {}, dto: {}}", id, customer);
     }
 
     @Override
     public void delete(UUID id) {
-        log.trace("Deleting beer {id: {}}", id);
+        log.trace("Deleting customer {id: {}}", id);
     }
 
 }

@@ -29,6 +29,7 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public void update(UUID id, BeerDto beer) {
         //TODO impl - would add real impl to update beer
+        log.trace("Updating beer {id: {}, dto: {}}", id, beer);
     }
 
     @Override

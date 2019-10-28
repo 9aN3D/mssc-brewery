@@ -39,16 +39,15 @@ public class BeerController {
 
         HttpHeaders headers = new HttpHeaders();
         //TODO add hostname to url
-        headers.add("Location", "/api/v1/beer" + savedDto.getId().toString());
+        headers.add("Location", "/api/v1/beer/" + savedDto.getId().toString());
 
         return new ResponseEntity(headers, CREATED);
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beer) {
+    @ResponseStatus(NO_CONTENT)
+    public void handleUpdate(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beer) {
         beerService.update(beerId, beer);
-
-        return new ResponseEntity(NO_CONTENT);
     }
 
     @DeleteMapping("/{beerId}")
