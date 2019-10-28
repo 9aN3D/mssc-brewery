@@ -5,11 +5,14 @@ import guru.springframework.msscbrewery.web.model.BeerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -31,7 +34,7 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity handlePost(BeerDto beer) {
+    public ResponseEntity handlePost(@RequestBody BeerDto beer) {
         BeerDto savedDto = beerService.save(beer);
 
         HttpHeaders headers = new HttpHeaders();
@@ -42,10 +45,16 @@ public class BeerController {
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, BeerDto beer) {
+    public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beer) {
         beerService.update(beerId, beer);
 
         return new ResponseEntity(NO_CONTENT);
+    }
+
+    @DeleteMapping("/{beerId}")
+    @ResponseStatus(NO_CONTENT)
+    public void delete(@PathVariable("beerId") UUID beerId) {
+        beerService.delete(beerId);
     }
 
 }
