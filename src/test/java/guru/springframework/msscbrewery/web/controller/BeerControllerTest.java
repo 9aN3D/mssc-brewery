@@ -43,8 +43,8 @@ class BeerControllerTest {
     void setUp() {
         validBeer = BeerDto.builder()
                 .id(UUID.randomUUID())
-                .beerName("Beer1")
-                .beerStyle("PALE_ALE")
+                .name("Beer1")
+                .style("PALE_ALE")
                 .upc(123456789012L)
                 .build();
     }
@@ -66,7 +66,7 @@ class BeerControllerTest {
     void testHandlePost() throws Exception {
         BeerDto beerDto = validBeer;
         beerDto.setId(null);
-        BeerDto savedDto = BeerDto.builder().id(UUID.randomUUID()).beerName("New Beer").build();
+        BeerDto savedDto = BeerDto.builder().id(UUID.randomUUID()).name("New Beer").build();
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
 
         given(beerService.save(any())).willReturn(savedDto);

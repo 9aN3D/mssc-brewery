@@ -16,8 +16,8 @@ public class BeerServiceV2Impl implements BeerServiceV2 {
     public BeerDtoV2 getBeer(UUID id) {
         return BeerDtoV2.builder()
                 .id(UUID.randomUUID())
-                .beerName("Galaxy Cat")
-                .beerStyle(LAGER)
+                .name("Galaxy Cat")
+                .style(LAGER)
                 .build();
     }
 

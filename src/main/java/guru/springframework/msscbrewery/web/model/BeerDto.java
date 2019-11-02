@@ -20,10 +20,10 @@ public class BeerDto {
     private UUID id;
 
     @NotBlank
-    private String beerName;
+    private String name;
 
     @NotBlank
-    private String beerStyle;
+    private String style;
 
     @Positive
     private Long upc;
