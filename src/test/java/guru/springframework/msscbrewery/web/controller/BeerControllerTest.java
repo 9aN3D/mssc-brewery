@@ -59,7 +59,7 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
-                .andExpect(jsonPath("$.beerName", is("Beer1")));
+                .andExpect(jsonPath("$.name", is("Beer1")));
     }
 
     @Test
