@@ -1,8 +1,8 @@
 package guru.springframework.msscbrewery.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.msscbrewery.service.BeerService;
-import guru.springframework.msscbrewery.web.model.BeerDto;
+import guru.springframework.msscbrewery.service.CustomerService;
+import guru.springframework.msscbrewery.web.model.CustomerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -24,12 +23,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.core.Is.is;
 
-@WebMvcTest(BeerController.class)
-class BeerControllerTest {
+@WebMvcTest(CustomerController.class)
+class CustomerControllerTest {
 
     @MockBean
-    BeerService beerService;
+    CustomerService customerService;
 
     @Autowired
     MockMvc mockMvc;
@@ -37,70 +37,70 @@ class BeerControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private BeerDto validBeer;
+    private CustomerDto validCustomer;
+
+    private final static String CUSTOMER_API_URL = "/api/v1/customer/";
 
     @BeforeEach
     void setUp() {
-        validBeer = BeerDto.builder()
+        validCustomer = CustomerDto.builder()
                 .id(UUID.randomUUID())
-                .beerName("Beer1")
-                .beerStyle("PALE_ALE")
-                .upc(123456789012L)
+                .name("Joi")
                 .build();
     }
 
     @Test
-    void testGetBeer() throws Exception {
-        given(beerService.getBeer(any(UUID.class))).willReturn(validBeer);
+    void testGetCustomer() throws Exception {
+        given(customerService.getCustomer(any(UUID.class))).willReturn(validCustomer);
 
         mockMvc.perform(
-                get("/api/v1/beer/" + validBeer.getId().toString())
+                get(CUSTOMER_API_URL + validCustomer.getId().toString())
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
-                .andExpect(jsonPath("$.beerName", is("Beer1")));
+                .andExpect(jsonPath("$.id", is(validCustomer.getId().toString())))
+                .andExpect(jsonPath("$.name", is(validCustomer.getName())));
     }
 
     @Test
     void testHandlePost() throws Exception {
-        BeerDto beerDto = validBeer;
-        beerDto.setId(null);
-        BeerDto savedDto = BeerDto.builder().id(UUID.randomUUID()).beerName("New Beer").build();
-        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
+        CustomerDto customer = validCustomer;
+        customer.setId(null);
+        CustomerDto savedCustomer = CustomerDto.builder().id(UUID.randomUUID()).name("Why").build();
+        String customerJson = objectMapper.writeValueAsString(customer);
 
-        given(beerService.save(any())).willReturn(savedDto);
+        given(customerService.save(any())).willReturn(savedCustomer);
 
         mockMvc.perform(
-                post("/api/v1/beer/")
+                post(CUSTOMER_API_URL)
                         .contentType(APPLICATION_JSON)
-                        .content(beerDtoJson))
+                        .content(customerJson))
                 .andExpect(status().isCreated());
     }
 
     @Test
     void testHandleUpdate() throws Exception {
-        BeerDto beerDto = validBeer;
-        beerDto.setId(null);
-        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
+        CustomerDto customer = validCustomer;
+        customer.setId(null);
+        String customerJson = objectMapper.writeValueAsString(customer);
 
         mockMvc.perform(
-                put("/api/v1/beer/" + UUID.randomUUID())
+                put(CUSTOMER_API_URL + UUID.randomUUID())
                         .contentType(APPLICATION_JSON)
-                        .content(beerDtoJson))
+                        .content(customerJson))
                 .andExpect(status().isNoContent());
 
-        then(beerService).should().update(any(), any());
+        then(customerService).should().update(any(), any());
     }
 
     @Test
     void testDelete() throws Exception {
         mockMvc.perform(
-                delete("/api/v1/beer/" + UUID.randomUUID())
+                delete(CUSTOMER_API_URL + UUID.randomUUID())
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
-        then(beerService).should().delete(any());
+        then(customerService).should().delete(any());
     }
 
 }
